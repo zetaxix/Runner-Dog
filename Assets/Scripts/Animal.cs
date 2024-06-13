@@ -8,16 +8,22 @@ public class Animal : MonoBehaviour
     protected virtual void MoveAnimal(float speed)
     {
         float verticalInput = Input.GetAxis("Vertical");
+        float smootForward = verticalInput * speed * Time.fixedDeltaTime;
 
-        transform.Translate(Vector3.forward * verticalInput * speed * Time.fixedDeltaTime);
+        Vector3 direction = Vector3.forward;
+
+        transform.Translate(direction * smootForward);
     
     }
 
     protected virtual void RotateAnimal(float rotateSpeed)
     {
         float horizontalInput = Input.GetAxis("Horizontal");
+        float smoothRotation = horizontalInput * rotateSpeed * Time.fixedDeltaTime;
 
-        transform.Rotate(Vector3.up * horizontalInput * rotateSpeed *Time.fixedDeltaTime, Space.World);
+        Vector3 direction = Vector3.up;
+
+        transform.Rotate(direction * smoothRotation, Space.World);
         
     }
 
