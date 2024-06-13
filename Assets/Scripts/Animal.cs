@@ -5,26 +5,28 @@ using UnityEngine;
 public class Animal : MonoBehaviour
 {
 
-    protected virtual void MoveAnimal(float speed)
+    protected virtual void MoveAnimal(float speed, Rigidbody body)
     {
         float verticalInput = Input.GetAxis("Vertical");
-        float smootForward = verticalInput * speed * Time.fixedDeltaTime;
+        float horizontalInput = Input.GetAxis("Horizontal");
 
-        Vector3 direction = Vector3.forward;
+        float smootForward = speed * Time.fixedDeltaTime;
 
-        transform.Translate(direction * smootForward);
-    
+        Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
+
+        body.AddForce(direction * smootForward, ForceMode.Impulse);
+
+        RotateAnimal(direction);
     }
 
-    protected virtual void RotateAnimal(float rotateSpeed)
+    protected virtual void RotateAnimal(Vector3 direction)
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float smoothRotation = horizontalInput * rotateSpeed * Time.fixedDeltaTime;
+        if (direction != Vector3.zero)
+        {
+            // Smooth rotate
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.05f);
+        }
 
-        Vector3 direction = Vector3.up;
-
-        transform.Rotate(direction * smoothRotation, Space.World);
-        
     }
 
 
