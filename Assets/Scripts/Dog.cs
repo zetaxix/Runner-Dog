@@ -13,6 +13,7 @@ public class Dog : Animal
     Rigidbody rb;
 
     bool canMove = true;
+    bool isSitting = false;
 
     [Header("Camera Settings")]
 
@@ -108,16 +109,31 @@ public class Dog : Animal
             StartCoroutine(BarkAnimController());
         }
         #endregion
+
+        #region Sitting Anim Controller
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            ToggleSitting();
+        }
+
+        #endregion
     }
 
     IEnumerator BarkAnimController()
     {
         canMove = false;
         animator.SetBool("IsBarking", true);
-        yield return new WaitForSeconds(3.17f);
+        yield return new WaitForSeconds(5.50f);
         animator.SetBool("IsBarking", false);
         canMove = true;
     }
 
+    void ToggleSitting()
+    {
+        isSitting = !isSitting; // Oturma durumu tersine çevrilir
+        canMove = !isSitting; // Hareket edebilme durumu oturma durumuna baðlý olarak güncellenir
+        animator.SetBool("IsSitting", isSitting); // Animasyon durumu güncellenir
+    }
 
 }
