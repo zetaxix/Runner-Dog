@@ -12,6 +12,8 @@ public class Dog : Animal
 
     Rigidbody rb;
 
+    bool canMove = true;
+
     [Header("Camera Settings")]
 
     public Transform cameraTransform;
@@ -51,17 +53,9 @@ public class Dog : Animal
 
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            direction = direction.normalized * (direction.magnitude + 1);
-        } else
-        {
-            direction = direction.normalized * (direction.magnitude);
-        }
-
         DogAnimController(direction);
 
-        if (direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.1f && canMove)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
 
@@ -77,8 +71,7 @@ public class Dog : Animal
 
     void DogAnimController(Vector3 direction)
     {
-        Debug.Log(Mathf.Abs(direction.magnitude));
-
+        #region Walking Anim Controller
         if (Mathf.Abs(direction.magnitude) > 0.1)
         {
             animator.SetBool("IsWalking", true);
@@ -86,6 +79,17 @@ public class Dog : Animal
         else
         {
             animator.SetBool("IsWalking", false);
+        }
+        #endregion
+
+        #region Running Anim Controller
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            direction = direction.normalized * (direction.magnitude + 1);
+        }
+        else
+        {
+            direction = direction.normalized * (direction.magnitude);
         }
 
         if (Mathf.Abs(direction.magnitude) > 1)
@@ -96,6 +100,23 @@ public class Dog : Animal
         {
             animator.SetBool("IsRunning", false);
         }
+        #endregion
+
+        #region Barking Anim Controller
+        if (Input.GetKey(KeyCode.E) && direction.magnitude == 0)
+        {
+            StartCoroutine(BarkAnimController());
+        }
+        #endregion
+    }
+
+    IEnumerator BarkAnimController()
+    {
+        canMove = false;
+        animator.SetBool("IsBarking", true);
+        yield return new WaitForSeconds(3.17f);
+        animator.SetBool("IsBarking", false);
+        canMove = true;
     }
 
 
