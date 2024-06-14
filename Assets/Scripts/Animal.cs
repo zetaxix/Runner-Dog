@@ -16,7 +16,6 @@ public class Animal : MonoBehaviour
 
         body.AddForce(direction * smootForward, ForceMode.Impulse);
 
-        RotateAnimal(direction);
     }
 
     protected virtual void RotateAnimal(Vector3 direction)

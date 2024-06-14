@@ -6,7 +6,7 @@ public class Dog : Animal
 {
     [Header("References")]
 
-    [SerializeField] float dogspeed = 7;
+    [SerializeField] float dogspeed = 3;
 
     private Animator animator;
 
@@ -35,10 +35,10 @@ public class Dog : Animal
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            dogspeed = 10;
+            dogspeed = 6;
         }else
         {
-            dogspeed = 7;
+            dogspeed = 3;
         }
 
         MoveAnimal(dogspeed, rb);
@@ -50,6 +50,14 @@ public class Dog : Animal
         float horizontalInput = Input.GetAxis("Horizontal");
 
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            direction = direction.normalized * (direction.magnitude + 1);
+        } else
+        {
+            direction = direction.normalized * (direction.magnitude);
+        }
 
         DogAnimController(direction);
 
@@ -69,7 +77,9 @@ public class Dog : Animal
 
     void DogAnimController(Vector3 direction)
     {
-        if (Mathf.Abs(direction.magnitude) > 0.08)
+        Debug.Log(Mathf.Abs(direction.magnitude));
+
+        if (Mathf.Abs(direction.magnitude) > 0.1)
         {
             animator.SetBool("IsWalking", true);
         }
@@ -78,7 +88,7 @@ public class Dog : Animal
             animator.SetBool("IsWalking", false);
         }
 
-        if (Mathf.Abs(direction.magnitude) > 2)
+        if (Mathf.Abs(direction.magnitude) > 1)
         {
             animator.SetBool("IsRunning", true);
         }
