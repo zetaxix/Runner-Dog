@@ -36,14 +36,6 @@ public class Dog : Animal
 
     private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            dogspeed = 6;
-        }else
-        {
-            dogspeed = 3;
-        }
-
         MoveAnimal(dogspeed, rb);
     }
 
@@ -68,6 +60,7 @@ public class Dog : Animal
 
             body.MovePosition(transform.position + moveDirection * speed * Time.fixedDeltaTime);
         }
+
     }
 
     void DogAnimController(Vector3 direction)
@@ -86,10 +79,12 @@ public class Dog : Animal
         #region Running Anim Controller
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            dogspeed = 6;
             direction = direction.normalized * (direction.magnitude + 1);
         }
         else
         {
+            dogspeed = 3;
             direction = direction.normalized * (direction.magnitude);
         }
 
